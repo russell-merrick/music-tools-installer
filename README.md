@@ -49,6 +49,25 @@ The zip root is the app root. `run` uses that folder as the working directory. A
 
 Each app zip is its own release asset. This repo only stores the catalog that points at them.
 
+## Plan
+
+One installer. The three apps stay folders under `apps\<id>`. One Python runs all of them. Do not freeze each app into its own exe.
+
+What works today: `list`, `check`, `install`, `remove`, `run`, and `stop` against a catalog. `catalog.example.json` has empty `url` and `sha256`, so `list` works and `install` does not. `run` starts the server only. It does not open a window. The desktop shortcuts (`Hoarder.lnk`, `Reroll.lnk`, `Resampler.lnk`) point at the git folders on the Desktop. Leave those for development.
+
+Pick this up locally first. No GitHub release yet.
+
+1. Zip each app from its current folder. Fill `url` and `sha256` in a local catalog. `install` puts the zip contents in `apps\<id>`.
+2. `run` starts the server when the health check is down, then opens an Edge app window the way each repo's `launch.ps1` does. Closing the window leaves the server running.
+3. A release shortcut points at the installed folder, not the git checkout.
+4. Keep user data outside `apps\<id>` before the first update. An update replaces the whole folder. That means Hoarder's `library.db` and Reroll's `user_settings.json`.
+
+Health checks to copy from the app launchers: Hoarder `GET http://127.0.0.1:8770/api/status`, Reroll `:8000/api/health`, Resampler `:8787/api/health`. Each Edge window uses its own profile under `%LOCALAPPDATA%\<App>\edge` and opens at 1280×800. Resampler's working start is `python -m resample.cli serve` with `PYTHONPATH` pointed at `src`. The catalog entry `resample serve` needs that same lookup.
+
+After that slice works: a Setup.exe wrapper, one bundled Python, ffmpeg for Hoarder, then `catalog.json` on this repo's GitHub release and each app zip on that app's own release. The Python already on the machine is enough until the bundled runtime exists.
+
+Repo: https://github.com/russell-merrick/music-tools-installer
+
 ## Not in this folder yet
 
 Real app zips, a shared Python, ffmpeg, and a Setup.exe wrapper.
