@@ -45,7 +45,7 @@ The zip root is the app root. `run` uses that folder as the working directory. A
 
 `catalog.example.json` lists the three apps with empty `url` and `sha256`. Those fields get filled when a zip exists. A real catalog is a file this shape, later hosted at a GitHub Releases URL:
 
-`https://github.com/<you>/music-tools-installer/releases/latest/download/catalog.json`
+`https://github.com/russell-merrick/music-tools-installer/releases/latest/download/catalog.json`
 
 Each app zip is its own release asset. This repo only stores the catalog that points at them.
 
@@ -62,7 +62,7 @@ Pick this up locally first. No GitHub release yet.
 3. A release shortcut points at the installed folder, not the git checkout.
 4. Keep user data outside `apps\<id>` before the first update. An update replaces the whole folder. That means Hoarder's `library.db` and Reroll's `user_settings.json`.
 
-Health checks to copy from the app launchers: Hoarder `GET http://127.0.0.1:8770/api/status`, Reroll `:8000/api/health`, Resampler `:8787/api/health`. Each Edge window uses its own profile under `%LOCALAPPDATA%\<App>\edge` and opens at 1280×800. Resampler's working start is `python -m resample.cli serve` with `PYTHONPATH` pointed at `src`. The catalog entry `resample serve` needs that same lookup.
+Health checks to copy from the app launchers: Hoarder `GET http://127.0.0.1:8770/api/status`, Reroll `:8000/api/health`, Resampler `:8787/api/health`. Each Edge window uses its own profile under `%LOCALAPPDATA%\<App>\edge`. Hoarder opens at 1280×800 the first time, then restores the saved size and position. Reroll and Resampler open at 1280×800 every time. Resampler's working start is `python -m resample.cli serve` with `PYTHONPATH` pointed at `src`. The catalog entry `resample serve` needs that same lookup.
 
 After that slice works: a Setup.exe wrapper, one bundled Python, ffmpeg for Hoarder, then `catalog.json` on this repo's GitHub release and each app zip on that app's own release. The Python already on the machine is enough until the bundled runtime exists.
 
